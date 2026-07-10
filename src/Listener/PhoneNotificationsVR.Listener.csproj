@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Infrastructure layer: the Windows notification listener source.
+    Reads notifications from the Windows notification centre via UserNotificationListener. The phone's
+    notifications arrive there courtesy of Microsoft Phone Link (which does the iPhone<->Windows bridge);
+    desktop apps (Discord, WhatsApp, Telegram, Slack…) post there directly.
+
+    NOTE: UserNotificationListener requires the running process to have *package identity*. See
+    docs/IDENTITY.md and the /packaging folder for the one-time sparse-package setup.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>PhoneNotificationsVR.Listener</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\PhoneNotificationsVR.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+
+</Project>

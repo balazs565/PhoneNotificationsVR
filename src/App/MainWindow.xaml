@@ -1,0 +1,226 @@
+<Window x:Class="PhoneNotificationsVR.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Phone Notifications for SteamVR" Height="720" Width="960"
+        Background="{StaticResource Bg}" WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header: connection status -->
+        <Border Grid.Row="0" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Ellipse Width="14" Height="14" VerticalAlignment="Center"
+                             Fill="{Binding PhoneConnected, Converter={StaticResource StatusBrush}}" />
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Phone / notifications" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding PhoneStatusText}" Foreground="{StaticResource Dim}" FontSize="12" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Ellipse Width="14" Height="14" VerticalAlignment="Center"
+                             Fill="{Binding VrConnected, Converter={StaticResource StatusBrush}}" />
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="SteamVR Overlay" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding VrStatusText}" Foreground="{StaticResource Dim}" FontSize="12" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Button Grid.Column="2" Content="Send Test Notification"
+                        Command="{Binding SendTestNotificationCommand}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+
+            <!-- DASHBOARD / PREVIEW -->
+            <TabItem Header="Dashboard">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4,12,4,4">
+                        <TextBlock Text="Overlay preview" Style="{StaticResource H1}" />
+                        <Border Style="{StaticResource Card}" Background="#0E0F13">
+                            <StackPanel>
+                                <Image Source="{Binding PreviewImage}" Stretch="Uniform"
+                                       MaxHeight="220" HorizontalAlignment="Left" />
+                                <Button Content="Refresh preview" Command="{Binding RefreshPreviewCommand}"
+                                        HorizontalAlignment="Left" Margin="0,12,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <TextBlock Foreground="{StaticResource Dim}" TextWrapping="Wrap"
+                                   Text="This is exactly what appears in VR. Adjust size, opacity, font and position in Settings — the preview updates live." />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- SETTINGS -->
+            <TabItem Header="Settings">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4,12,4,4" DataContext="{Binding Settings}">
+
+                        <TextBlock Text="Position" Style="{StaticResource H1}" />
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Anchor" Foreground="{StaticResource Dim}" />
+                                <ComboBox ItemsSource="{Binding Anchors}" SelectedItem="{Binding Anchor}" Margin="0,4,0,10" />
+                                <TextBlock Text="Hand (for controller / wrist)" Foreground="{StaticResource Dim}" />
+                                <ComboBox ItemsSource="{Binding Hands}" SelectedItem="{Binding Hand}" Margin="0,4,0,10" />
+                                <TextBlock Text="Distance in front (m)" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="0.5" Maximum="3" Value="{Binding FollowDistance}" />
+                                <TextBlock Text="Offset up (m)" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="-1" Maximum="1" Value="{Binding OffsetUp}" />
+                                <TextBlock Text="Offset right (m)" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="-1" Maximum="1" Value="{Binding OffsetRight}" />
+                                <TextBlock Text="Curvature" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="0" Maximum="1" Value="{Binding Curvature}" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Appearance" Style="{StaticResource H1}" />
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Size (width in metres)" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="0.15" Maximum="0.8" Value="{Binding WidthMeters}" />
+                                <TextBlock Text="Opacity" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="0.2" Maximum="1" Value="{Binding Opacity}" />
+                                <TextBlock Text="Font size" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="0.6" Maximum="2" Value="{Binding FontScale}" />
+                                <TextBlock Text="Duration on screen (s)" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="1" Maximum="20" Value="{Binding DurationSeconds}" />
+                                <TextBlock Text="Animation speed (s)" Foreground="{StaticResource Dim}" />
+                                <Slider Minimum="0.05" Maximum="1" Value="{Binding AnimationSeconds}" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Filtering" Style="{StaticResource H1}" />
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Mode" Foreground="{StaticResource Dim}" />
+                                <ComboBox ItemsSource="{Binding FilterModes}" SelectedItem="{Binding FilterMode}" Margin="0,4,0,10" />
+                                <CheckBox Content="Always show incoming calls (bypass filters)" Foreground="{StaticResource Fg}"
+                                          IsChecked="{Binding AlwaysShowCalls}" Margin="0,0,0,10" />
+                                <TextBlock Text="Add app bundle id (e.g. net.whatsapp.WhatsApp)" Foreground="{StaticResource Dim}" />
+                                <Grid Margin="0,4,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding NewAppId, UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalContentAlignment="Center" Padding="6" />
+                                    <Button Grid.Column="1" Content="+ Whitelist" Margin="8,0,0,0"
+                                            Command="{Binding AddToWhitelistCommand}" />
+                                    <Button Grid.Column="2" Content="+ Blacklist" Margin="8,0,0,0"
+                                            Command="{Binding AddToBlacklistCommand}" />
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Whitelist" Foreground="{StaticResource Dim}" />
+                                        <ItemsControl ItemsSource="{Binding Whitelist}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <DockPanel Margin="0,3">
+                                                        <Button DockPanel.Dock="Right" Content="✕" Width="26" Background="#3A3F4B"
+                                                                Command="{Binding DataContext.RemoveWhitelistedCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                CommandParameter="{Binding}" />
+                                                        <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                        <TextBlock Text="Blacklist" Foreground="{StaticResource Dim}" />
+                                        <ItemsControl ItemsSource="{Binding Blacklist}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <DockPanel Margin="0,3">
+                                                        <Button DockPanel.Dock="Right" Content="✕" Width="26" Background="#3A3F4B"
+                                                                Command="{Binding DataContext.RemoveBlacklistedCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                CommandParameter="{Binding}" />
+                                                        <TextBlock Text="{Binding}" VerticalAlignment="Center" />
+                                                    </DockPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Sound" Style="{StaticResource H1}" />
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <CheckBox Content="Play a sound with each notification" Foreground="{StaticResource Fg}"
+                                          IsChecked="{Binding SoundEnabled}" />
+                                <TextBlock Text="Volume" Foreground="{StaticResource Dim}" Margin="0,8,0,0" />
+                                <Slider Minimum="0" Maximum="1" Value="{Binding SoundVolume}" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="General" Style="{StaticResource H1}" />
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <CheckBox Content="Start with Windows" Foreground="{StaticResource Fg}" Margin="0,3"
+                                          IsChecked="{Binding StartWithWindows}" />
+                                <CheckBox Content="Start minimized to tray" Foreground="{StaticResource Fg}" Margin="0,3"
+                                          IsChecked="{Binding StartMinimized}" />
+                                <CheckBox Content="Minimize to tray on close" Foreground="{StaticResource Fg}" Margin="0,3"
+                                          IsChecked="{Binding MinimizeToTrayOnClose}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- HISTORY -->
+            <TabItem Header="History">
+                <ListBox ItemsSource="{Binding History}" Background="Transparent" BorderThickness="0"
+                         Margin="0,12,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource Card}" Margin="0,0,0,8">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding AppName}" FontWeight="SemiBold" Foreground="{StaticResource Accent}" />
+                                        <TextBlock Text="  ·  " Foreground="{StaticResource Dim}" />
+                                        <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}" Foreground="{StaticResource Dim}" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding BestSender}" FontWeight="SemiBold" Margin="0,2,0,0" />
+                                    <TextBlock Text="{Binding Message}" Foreground="{StaticResource Dim}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+
+            <!-- LOG -->
+            <TabItem Header="Log">
+                <ListBox ItemsSource="{Binding Log}" Background="#0E0F13" Foreground="{StaticResource Dim}"
+                         FontFamily="Consolas" FontSize="12" BorderThickness="0" Margin="0,12,0,0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

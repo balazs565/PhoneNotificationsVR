@@ -1,0 +1,36 @@
+## .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+publish/
+
+## Rider
+.idea/
+
+## Build output
+[Dd]ebug/
+[Rr]elease/
+*.dll
+*.pdb
+
+## App data (local settings)
+settings.json
+
+## Packaging: signing secrets & generated sparse package (NEVER commit these)
+packaging/build/
+*.pfx
+*.cer
+*.snk
+*.msix
+*.msixbundle
+*.appx
+
+## Release artifacts
+release/
+*.zip
+
+## OS cruft
+Thumbs.db
+Desktop.ini
+.DS_Store

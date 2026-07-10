@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Infrastructure layer: the Apple Notification Center Service (ANCS) client over Bluetooth LE.
+    Targets net8.0-windows10.0.19041.0 so it can call the Windows.Devices.Bluetooth WinRT APIs
+    directly from .NET 8 via the built-in CsWinRT projection (no extra NuGet needed for WinRT).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>PhoneNotificationsVR.Ancs</RootNamespace>
+    <UseWindowsForms>false</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\PhoneNotificationsVR.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+
+</Project>
