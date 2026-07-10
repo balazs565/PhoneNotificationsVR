@@ -8,6 +8,19 @@ without interrupting what you're doing.
 
 ![status](https://img.shields.io/badge/platform-Windows%2010%2F11-blue) ![dotnet](https://img.shields.io/badge/.NET-8.0-512BD4) ![vr](https://img.shields.io/badge/SteamVR-OpenVR%20overlay-1b2838)
 
+![Phone Notifications for SteamVR](assets/hero.png)
+
+> The notification cards above are **not mockups** — they are produced by the app's actual
+> `NotificationRenderer` (the same code that draws them onto the VR overlay). The backdrop is a design
+> backdrop, not a captured game frame.
+
+### Notification cards
+
+<img src="assets/cards-gallery.png" alt="Notification card styles" width="420">
+
+Each card shows the app icon (color-coded per app), app name, sender, an optional title, the message
+(wrapped up to 3 lines), and the time — in a lightweight, Quest-style layout with per-app accent colors.
+
 ---
 
 ## How it works (and why there is no iPhone app)

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Promo-image generator (not part of the app or the solution build).
+    Drives the REAL NotificationRenderer headlessly so the marketing images are pixel-identical to what
+    the overlay draws in VR. Run it via dotnet run on this project, passing an output directory argument.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Overlay\PhoneNotificationsVR.Overlay.csproj" />
+    <ProjectReference Include="..\..\src\Core\PhoneNotificationsVR.Core.csproj" />
+  </ItemGroup>
+
+</Project>

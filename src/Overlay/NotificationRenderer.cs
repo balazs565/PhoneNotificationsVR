@@ -122,8 +122,10 @@ public sealed class NotificationRenderer : INotificationRenderer
 
     private static string TitleFor(PhoneNotification n)
     {
-        if (n.Category == NotificationCategory.IncomingCall) return "📞 Incoming Call";
-        if (n.Category == NotificationCategory.MissedCall) return "📵 Missed Call";
+        // The colored icon badge already shows a phone glyph, so keep the title line text-only —
+        // an emoji here renders as a "tofu" box under GDI+ ClearType (Segoe UI lacks emoji coverage).
+        if (n.Category == NotificationCategory.IncomingCall) return "Incoming Call";
+        if (n.Category == NotificationCategory.MissedCall) return "Missed Call";
         // If the phone gave a distinct subtitle, show it as the title line.
         return string.Equals(n.Subtitle, n.BestSender, StringComparison.Ordinal) ? string.Empty : n.Subtitle;
     }
