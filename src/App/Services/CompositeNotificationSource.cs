@@ -8,8 +8,8 @@ namespace PhoneNotificationsVR.App.Services;
 /// behind one <see cref="INotificationSource"/> so the dispatcher has a single input. The connection
 /// status the UI shows is the real source's, forwarded through unchanged.
 ///
-/// Source-agnostic on purpose: <paramref name="primary"/> is just an <see cref="INotificationSource"/>,
-/// so swapping the listener for the ANCS/Bluetooth source (or any future source) needs no change here.
+/// Source-agnostic on purpose: the primary is just an <see cref="INotificationSource"/>, so swapping the
+/// listener for the ANCS/Bluetooth source (or any future source) needs no change here.
 /// </summary>
 public sealed class CompositeNotificationSource : INotificationSource
 {
