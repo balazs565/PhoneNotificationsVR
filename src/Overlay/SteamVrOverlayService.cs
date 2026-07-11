@@ -68,7 +68,11 @@ public sealed class SteamVrOverlayService : IOverlayService
         {
             if (!_initialised)
             {
-                if (TryInit()) SetStatus(ConnectionState.Connected, "SteamVR overlay ready");
+                // IMPORTANT: only touch OpenVR when SteamVR is already running. Initialising with an
+                // Overlay/Scene app type would *launch* SteamVR — and, because this loop retries, it would
+                // relaunch it every time the user closes it. We attach to SteamVR, we never start it.
+                if (!IsSteamVrRunning()) SetStatus(ConnectionState.Reconnecting, "Waiting for SteamVR…");
+                else if (TryInit()) SetStatus(ConnectionState.Connected, "SteamVR overlay ready");
                 else SetStatus(ConnectionState.Reconnecting, "Waiting for SteamVR…");
             }
 
@@ -78,6 +82,21 @@ public sealed class SteamVrOverlayService : IOverlayService
             try { await Task.Delay(TimeSpan.FromSeconds(_initialised ? 1 : 3), ct); }
             catch (OperationCanceledException) { break; }
         }
+    }
+
+    /// <summary>
+    /// True when SteamVR is already running. Checked via its processes (side-effect free) rather than by
+    /// calling OpenVR, because initialising OpenVR with an Overlay/Scene app type would <b>launch</b> SteamVR.
+    /// </summary>
+    private static bool IsSteamVrRunning()
+    {
+        foreach (var name in new[] { "vrserver", "vrmonitor" })
+        {
+            var procs = Process.GetProcessesByName(name);
+            try { if (procs.Length > 0) return true; }
+            finally { foreach (var p in procs) p.Dispose(); }
+        }
+        return false;
     }
 
     private bool TryInit()

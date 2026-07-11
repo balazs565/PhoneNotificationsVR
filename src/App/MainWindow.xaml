@@ -4,6 +4,16 @@
         Title="Phone Notifications for SteamVR" Height="720" Width="960"
         Icon="pack://application:,,,/app.ico"
         Background="{StaticResource Bg}" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!--
+          App-wide text style, scoped to this window so it does NOT leak into system-drawn popups
+          (e.g. the tray context menu, which would otherwise get white text on a light background).
+        -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource Fg}" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+        </Style>
+    </Window.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

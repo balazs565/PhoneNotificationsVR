@@ -18,10 +18,11 @@
             <SolidColorBrush x:Key="Dim" Color="#96A0B0" />
             <SolidColorBrush x:Key="Accent" Color="#5E84F1" />
 
-            <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource Fg}" />
-                <Setter Property="FontFamily" Value="Segoe UI" />
-            </Style>
+            <!--
+              NOTE: the app-wide TextBlock foreground style lives in MainWindow.Resources, NOT here.
+              An implicit TextBlock style at Application scope leaks into system-drawn popups such as the
+              tray context menu, forcing near-white text onto the light menu background (white-on-white).
+            -->
             <Style x:Key="H1" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource Fg}" />
                 <Setter Property="FontSize" Value="20" />
