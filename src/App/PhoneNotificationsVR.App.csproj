@@ -12,7 +12,13 @@
     <RootNamespace>PhoneNotificationsVR.App</RootNamespace>
     <AssemblyName>PhoneNotificationsVR</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Bundle the icon so the window title bar and tray icon can reuse it. -->
+    <Resource Include="app.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\PhoneNotificationsVR.Core.csproj" />

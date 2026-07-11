@@ -109,7 +109,12 @@ public partial class App : Application
             ToolTipText = "Phone Notifications for SteamVR",
             Visibility = Visibility.Visible,
         };
-        try { tray.Icon = System.Drawing.SystemIcons.Application; } catch { /* icon optional */ }
+        try
+        {
+            var stream = GetResourceStream(new Uri("pack://application:,,,/app.ico"))?.Stream;
+            if (stream is not null) tray.Icon = new System.Drawing.Icon(stream);
+        }
+        catch { tray.Icon = System.Drawing.SystemIcons.Application; /* fall back if resource missing */ }
 
         var menu = new System.Windows.Controls.ContextMenu();
         var open = new System.Windows.Controls.MenuItem { Header = "Open" };
