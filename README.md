@@ -1,4 +1,4 @@
-# Phone Notifications for SteamVR
+# <img src="assets/icon.png" width="34" align="top" alt=""> Phone Notifications for SteamVR
 
 Never miss a call or an important iPhone notification while you're in VR.
 
